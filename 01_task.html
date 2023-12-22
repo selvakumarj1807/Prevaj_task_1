@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table with Sort and Pagination</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Table with Sort and Pagination</h2>
+
+    <table id="myTable">
+        <thead>
+            <tr>
+                <th onclick="sortTable(0)">ID</th>
+                <th onclick="sortTable(1)">Name</th>
+                <th onclick="sortTable(2)">Age</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- Table data will be dynamically added here -->
+        </tbody>
+    </table>
+
+    <div id="pagination"></div>
+
+    <script>
+        // Sample data
+        const data = [
+            { id: 1, name: 'John Doe', age: 25 },
+            { id: 2, name: 'Jane Doe', age: 30 },
+            { id: 3, name: 'Bob Smith', age: 22 },
+            { id: 4, name: 'Jane Doe', age: 30 },
+            { id: 5, name: 'Bob Smith', age: 22 },
+            // Add more data as needed
+        ];
+
+        const itemsPerPage = 2;
+        let currentPage = 1;
+
+        function renderTableData(page) {
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+
+            const start = (page - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedData = data.slice(start, end);
+
+            for (const item of paginatedData) {
+                const row = tableBody.insertRow();
+                row.insertCell(0).textContent = item.id;
+                row.insertCell(1).textContent = item.name;
+                row.insertCell(2).textContent = item.age;
+            }
+        }
+
+        function renderPagination() {
+            const totalPages = Math.ceil(data.length / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                pageButton.addEventListener('click', () => {
+                    currentPage = i;
+                    renderTableData(currentPage);
+                });
+                pagination.appendChild(pageButton);
+            }
+        }
+
+        function sortTable(column) {
+            data.sort((a, b) => {
+                const valueA = a[Object.keys(a)[column]];
+                const valueB = b[Object.keys(b)[column]];
+                return valueA.localeCompare ? valueA.localeCompare(valueB) : valueA - valueB;
+            });
+
+            renderTableData(currentPage);
+            renderPagination();
+        }
+
+        // Initial rendering
+        renderTableData(currentPage);
+        renderPagination();
+    </script>
+
+</body>
+
+</html>

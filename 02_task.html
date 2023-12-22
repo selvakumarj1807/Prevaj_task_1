@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite Slider</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        #slider-container {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            text-align: center;
+            height: 60px;
+        }
+
+        .slider-item {
+            min-width: 100vw;
+            box-sizing: border-box;
+            flex: 0 0 auto;
+        }
+
+        #prev,
+        #next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border: none;
+            outline: none;
+            user-select: none;
+        }
+
+        #prev {
+            left: 10px;
+        }
+
+        #next {
+            right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="slider-container">
+        <div class="slider-item" style="background-color: #1abc9c;">1</div>
+        <div class="slider-item" style="background-color: #3498db;">2</div>
+        <div class="slider-item" style="background-color: #e74c3c;">3</div>
+        <!-- Add more slider items as needed -->
+    </div>
+
+    <button id="prev">&lt;</button>
+    <button id="next">&gt;</button>
+
+    <script>
+        const sliderContainer = document.getElementById('slider-container');
+        const prevButton = document.getElementById('prev');
+        const nextButton = document.getElementById('next');
+        const sliderItems = document.querySelectorAll('.slider-item');
+
+        let currentIndex = 0;
+
+        function updateSlider() {
+            const itemWidth = sliderItems[0].offsetWidth;
+            sliderContainer.style.transform = `translateX(${-currentIndex * itemWidth}px)`;
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % sliderItems.length;
+            updateSlider();
+        }
+
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + sliderItems.length) % sliderItems.length;
+            updateSlider();
+        }
+
+        // Event listeners for arrow buttons
+        nextButton.addEventListener('click', nextSlide);
+        prevButton.addEventListener('click', prevSlide);
+
+        // Automatic sliding (optional)
+        setInterval(nextSlide, 3000); // Change the interval as needed
+    </script>
+
+</body>
+
+</html>
